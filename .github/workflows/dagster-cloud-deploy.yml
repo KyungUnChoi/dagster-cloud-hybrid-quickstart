@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 env:
   # The organization name in Dagster Cloud
-  DAGSTER_CLOUD_ORGANIZATION: "<organization-name>"
+  DAGSTER_CLOUD_ORGANIZATION: "my-test-org-2024"
   # The API token from https://dagster.cloud/ should be stored in Secrets
   DAGSTER_CLOUD_API_TOKEN: ${{ secrets.DAGSTER_CLOUD_API_TOKEN }}
   # Path to the root folder containing the dagster project
@@ -21,7 +21,7 @@ env:
   # Path to dagster_cloud.yaml relative to DAGSTER_PROJECT_DIR
   DAGSTER_CLOUD_YAML_PATH: "dagster_cloud.yaml"
   # The IMAGE_REGISTRY should match the 'registry:'' in dagster_cloud.yaml
-  IMAGE_REGISTRY: "<account-id>.dkr.ecr.us-west-2.amazonaws.com/<image-name>"
+  IMAGE_REGISTRY: "netaa4appimage.azurecr.io/dagster-plus/quickstart_etl"
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   dagster-cloud-deploy:
@@ -74,6 +74,14 @@ jobs:
       # Building and deploying the docker image requires a login step specific to the container
       # registry.
       # Multiple examples are provided below.
+
+      # Azure ACR
+      - name: Login to Azure Container Registry
+        uses: azure/docker-login@v2
+        with:
+          login-server: netaa4appimage.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
 
       # # AWS ECR
       # # https://github.com/aws-actions/amazon-ecr-login
