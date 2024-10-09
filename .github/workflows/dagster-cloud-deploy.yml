@@ -22,7 +22,8 @@ env:
   DAGSTER_CLOUD_YAML_PATH: "dagster_cloud.yaml"
   # The IMAGE_REGISTRY should match the 'registry:'' in dagster_cloud.yaml
   IMAGE_REGISTRY: "netaa4appimage.azurecr.io/dagster-plus/quickstart_etl"
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  DOCKER_BUILDKIT: 1
 jobs:
   dagster-cloud-deploy:
     runs-on: ubuntu-20.04
@@ -82,48 +83,6 @@ jobs:
           login-server: netaa4appimage.azurecr.io
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
-
-      # # AWS ECR
-      # # https://github.com/aws-actions/amazon-ecr-login
-      # - name: Configure AWS credentials
-      #   if: steps.prerun.outputs.result != 'skip'
-      #   uses: aws-actions/configure-aws-credentials@v2
-      #   with:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region:  ${{ secrets.AWS_REGION }}
-      # - name: Login to ECR
-      #   if: steps.prerun.outputs.result != 'skip'
-      #   uses: aws-actions/amazon-ecr-login@v1
-
-      # # DockerHub
-      # # https://github.com/docker/login-action#docker-hub
-      # - name: Login to Docker Hub
-      #   if: steps.prerun.outputs.result != 'skip'
-      #   uses: docker/login-action@v1
-      #   with:
-      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
-      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      # # GitHub Container Registry
-      # # https://github.com/docker/login-action#github-container-registry
-      # - name: Login to GitHub Container Registry
-      #   if: steps.prerun.outputs.result != 'skip'
-      #   uses: docker/login-action@v1
-      #   with:
-      #     registry: ghcr.io
-      #     username: ${{ github.actor }}
-      #     password: ${{ secrets.GITHUB_TOKEN }}
-
-      # # GCR
-      # # https://github.com/docker/login-action#google-container-registry-gcr
-      # - name: Login to GCR
-      #   if: steps.prerun.outputs.result != 'skip'
-      #   uses: docker/login-action@v1
-      #   with:
-      #     registry: gcr.io
-      #     username: _json_key
-      #     password: ${{ secrets.GCR_JSON_KEY }}
 
       # Build the "quickstart_etl" location.
       # For each code location, the "build-push-action" builds the docker
